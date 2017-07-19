@@ -43,7 +43,7 @@ f) 第六层：树型显示评论内容<br>
 #### 三. 建立数据库模型(models)
 >1. BBS.models
 >>* 因为该项目的对象主要有：文章（Article）、评论（Comment）、新闻分类（Category）、用户（UserProfile），所以在BBS.models中创建了以下4个Model对象：
-```Python
+>>```Python
 class Article(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey("Category")
@@ -107,8 +107,8 @@ class UserProfile(models.Model):
         return self.name
 ```
 >>* 只要你在Model类中对属性设置好ForeignKey，那么Django会自动管理两张表的关系，省去了构造中间表的麻烦，非常方便。
->2. webchat.models
-```Python
+2. webchat.models
+>>```Python
 class WebGroup(models.Model):
     name = models.CharField(max_length=64)
     brief = models.CharField(max_length=255, blank=True, null=True)
@@ -132,7 +132,7 @@ class WebGroup(models.Model):
 #### 五. urls.py和settings.py的设置
 
 #### 六. ModelForm的实现
-ModelForm中要显示的字段为发帖时所要填写的字段，所以要隐藏掉"author"（该属性可以在view中通过request.user.userprofile.id获取）,"priority"（其实这字段有点多余）
+>ModelForm中要显示的字段为发帖时所要填写的字段，所以要隐藏掉"author"（该属性可以在view中通过request.user.userprofile.id获取）,"priority"（其实这字段有点多余）
 
 #### 七. 业务逻辑层的实现(views)
 

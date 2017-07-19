@@ -12,7 +12,7 @@ JQuery<br>
 * Author： 李梓铭<br>
 * E-mail：1564603397@qq.com
 
-Python版本：3.6
+Python版本：3.6<br>
 Django版本：1.11.2
 
 ### 实现思路

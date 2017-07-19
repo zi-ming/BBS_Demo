@@ -1,5 +1,9 @@
-BBS_Demo
+#BBS_Demo
 ===================
-该文件用来测试和展示书写README的各种markdown语法。GitHub的markdown语法在标准的markdown语法基础上做了扩充，称之为GitHub Flavored Markdown。简称GFM，GFM在GitHub上有广泛应用，除了README文件外，issues和wiki均支持markdown语法。
+
+###该项目模仿了“虎嗅”的网页效果，实现了新闻资讯的分类、浏览、对新闻详细内容的查看，评论；借助Django自带的后台实现对新闻和评论以及用户的管理；除此之外，还实现了用户在线聊天的功能。
 ----------------------
+Author： 李梓铭
+
+E-mail：1564603397@qq.com
 

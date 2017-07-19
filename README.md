@@ -12,6 +12,9 @@ JQuery<br>
 * Author： 李梓铭<br>
 * E-mail：1564603397@qq.com
 
+Python版本：3.6
+Django版本：1.11.2
+
 ### 实现思路
 #### 一. 确定需求
 >1.实现新闻分类<br>

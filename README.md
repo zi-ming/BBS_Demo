@@ -43,7 +43,7 @@ f) 第六层：树型显示评论内容<br>
 #### 三. 建立数据库模型(models)
 >1. BBS.models
 >>* 因为该项目的对象主要有：文章（Article）、评论（Comment）、新闻分类（Category）、用户（UserProfile），所以在BBS.models中创建了以下4个Model对象：
->>```Python
+```Python
 class Article(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey("Category")
@@ -108,7 +108,7 @@ class UserProfile(models.Model):
 ```
 >>* 只要你在Model类中对属性设置好ForeignKey，那么Django会自动管理两张表的关系，省去了构造中间表的麻烦，非常方便。
 2. webchat.models
->>```Python
+```Python
 class WebGroup(models.Model):
     name = models.CharField(max_length=64)
     brief = models.CharField(max_length=255, blank=True, null=True)

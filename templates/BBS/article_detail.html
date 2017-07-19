@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load tools %}
+
+{% block style-container %}
+    <link href="/static/bootstrap/css/blog.css" rel="stylesheet">
+{% endblock %}
+
+{% block page-container %}
+    <div class="container">
+
+        <div class="blog-header">
+            <h2 class="blog-title">{{ article.title }}</h2>
+        </div>
+
+        <div class="row">
+
+            <div class="blog-main">
+
+                <div class="blog-post">
+                    <p class="blog-post-meta">{{ article.pub_date }} <a
+                            href="http://v3.bootcss.com/examples/blog/#">{{ article.author }}</a></p>
+                    <p>
+                        <img src="/static/{{ article.head_img|truncate_imgUrl }}">
+                        {{ article.content | safe }}
+                    </p>
+
+                </div><!-- /.blog-main -->
+            </div><!-- /.row -->
+        </div>
+
+        {% if request.user.is_authenticated %}
+            <div class="comment-box">
+                <textarea class="form-control" rows="3"></textarea>
+                <button type="button" class="btn btn-success" style="float: right;margin-top: 10px">发表</button>
+            </div>
+        {% else %}
+            <div class="jumbotron">
+                <h3 class="text-center">
+                    <a class="btn-link" href="{% url 'login' %}?next={{ request.path }}">登陆</a>后评论
+                </h3>
+            </div>
+        {% endif %}
+        {% cal_cmt_fvr article as cmt_info %}
+        <button id="cmts_view" type="button" class="btn btn-warning" style="margin-top: 10px">
+            查看评论（测试而已）[{{ cmt_info.sum_cmt }}]
+        </button>
+        <button id="btn-fvr" type="button" class="btn btn-danger" style="margin-top: 10px">点赞[{{ cmt_info.sum_fvr }}]
+        </button>
+        <div id="cmt_list"></div>
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+        <p>Blog template built for <a href="http://getbootstrap.com/">Bootstrap</a> by <a
+                href="#">@ziming</a>.</p>
+        <p>
+            <a href="http://v3.bootcss.com/examples/blog/#">Back to top</a>
+        </p>
+    </footer>
+{% endblock %}
+
+{% block script-container %}
+    <script>
+        function postCommend(ths, parent_cmt_id, cmt_type) {
+
+            if (cmt_type == 0) {
+                var cmt_text = $(ths).parent().children("textarea").val();
+            } else {
+                var cmt_text = null;
+            }
+
+            if (cmt_type == 1 || cmt_text.trim().length != 0) {
+                $.post(
+                    "{% url "comment_submit" %}",
+                    {
+                        article_id: "{{ article.id }}",
+                        cmt_type: cmt_type,
+                        cmt: cmt_text,
+                        parent_cmt_id: parent_cmt_id
+                    },
+                    function (callback) {
+                        if (cmt_type == 0) {
+                            $("#cmts_view").val("查看评论（测试而已）[" + callback + "]");
+                            getComment(true);
+                        } else {
+                            $("#btn-fvr").val("点赞[" + callback + "]");
+                        }
+                    }
+                );
+            } else {
+                alert("评论不能为空");
+            }
+        }
+
+        function getComment(reflash) {
+            var cmt_text = $("#cmt_list").html();
+            if (cmt_text.length == 0 || reflash) {
+                $.get("{% url 'getComments' article.id %}", function (callback) {
+                    $("#cmt_list").html(callback);
+                    $(".glyphicon-comment").click(function () {
+                        var cmt_id = $(this).attr("cmt_id");
+
+                        var new_cmt_box = '<div style="height: 130px" id="new_cmt_box">' +
+                            '<textarea class="form-control" rows="3"></textarea>' +
+                            '<button type="button" class="btn btn-success" style="float: right;margin-top: 10px" onclick="postCommend(this,' + cmt_id + ');">发表</button>' +
+                            '</div>';
+                        $("#new_cmt_box").remove();
+                        $(this).parent().append(new_cmt_box);
+                    });
+                });
+                {% cal_cmt_fvr article as cmt_info %}
+                $("#cmts_view").val("查看评论（测试而已）[{{ cmt_info.sum_cmt }}]");
+            }
+            else {
+                $("#cmt_list").html("");
+            }
+        }
+
+        $(document).ready(function () {
+            $(".comment-box button").click(function () {
+                var cmt_text = $(".comment-box textarea").val();
+                if (cmt_text.trim().length == 0) {
+                    alert("评论不能为空");
+                }
+                else {
+                    postCommend(this, null, 0);
+                } // end if
+            }); // end click
+
+            $("#cmts_view").click(function () {
+                getComment(false);
+            });
+
+            $("#btn-fvr").click(function () {
+                postCommend(null, null, 1);
+                {#                $.post(#}
+                {#                    "{% url 'comment_submit' %}",#}
+                {#                    {#}
+                {#                        article_id: "{{ article.id }}",#}
+                {#                        cmt_type: 1,#}
+                {#                        cmt: null,#}
+                {#                        parent_cmt_id: null#}
+                {#                    },#}
+                {#                    function (callback) {#}
+                {#                        if (callback == "OK") {#}
+                {#                            {% cal_cmt_fvr article as cmt_info %}#}
+                {#                            $("#btn-fvr").val("点赞[{{ cmt_info.sum_fvr }}]");#}
+                {#                        }#}
+                {#                    }#}
+                {#                )#}
+            });
+
+            // --------------------------页面初始化：--------------------------
+            getComment(true);
+
+        }); // end ready
+    </script>
+{% endblock %}

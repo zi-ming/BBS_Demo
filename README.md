@@ -1,7 +1,7 @@
 BBS_Demo
 ===================
 
-##### 该项目模仿了“虎嗅”的网页效果，实现了新闻资讯的分类、浏览、对新闻详细内容的查看，评论；借助Django自带的后台实现对新闻和评论以及用户的管理；除此之外，还实现了用户在线聊天的功能。
+ 该项目模仿了“虎嗅”的网页效果，实现了新闻资讯的分类、浏览、对新闻详细内容的查看，评论；借助Django自带的后台实现对新闻和评论以及用户的管理；除此之外，还实现了用户在线聊天的功能。
 
 #### 知识要点：
 >>Django<br>
@@ -27,7 +27,7 @@ BBS_Demo
 (2) 如果用户未登陆，则菜单栏的右侧只显示“登陆”、“发帖”等功能界面<br>
 (3) 要求新闻列表每一项的显示信息包括如下：新闻图片、新闻标题、作者、发表时间、简介、评论数以及点赞数<br>
   
->2.点击新闻列表的某一条新闻时，浏览器在新的标签显示对应新闻的详细信息（标题、发表时间、作者、内容）
+>2.点击新闻列表的某一条新闻时，浏览器在新的标签显示对应新闻的详细信息（标题、发表时间、作者、内容，评论以及点赞）
 >>(1) 新闻详细信息页面分为六层：<br>
 >>>a) 第一层：显示新闻标题<br>
 b) 第二层：显示发表时间、作者<br>
@@ -43,7 +43,7 @@ f) 第六层：树型显示评论内容<br>
 #### 三. 建立数据库模型（models）
 >1. BBS.models
 >>* 因为该项目的对象主要有：文章（Article）、评论（Comment）、新闻分类（Category）、用户（UserProfile），所以在BBS.models中创建了以下4个Model对象：
-```
+```Python
 class Article(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey("Category")
@@ -107,24 +107,37 @@ class UserProfile(models.Model):
         return self.name
 ```
 >>* 只要你在Model类中对属性设置好ForeignKey，那么Django会自动管理两张表的关系，省去了构造中间表的麻烦，非常方便。
+>2. webchat.models
+```Python
+class WebGroup(models.Model):
+    name = models.CharField(max_length=64)
+    brief = models.CharField(max_length=255, blank=True, null=True)
+    owner = models.ForeignKey(UserProfile)
+    admins = models.ManyToManyField(UserProfile, related_name="group_admins", blank=True)
+    members = models.ManyToManyField(UserProfile, related_name="group_members", blank=True)
+    max_members = models.IntegerField(default=200)
 
->>2. 前端布局实现
->>>(1) 创建一个模板Base.html，该模板是从[BootStrap](http://v3.bootcss.com/examples/navbar-fixed-top/)里刮下来的，精简了一下，无论是新闻主页、新闻详细内容页面、发帖页面以及在线聊天页面都需要继承自该模板，这样有助于减少代码冗余，方便维护。<br>
+    def __str__(self):
+        return self.name
+```
+
+2. 前端布局实现
+>>(1) 创建一个模板Base.html，该模板是从[BootStrap](http://v3.bootcss.com/examples/navbar-fixed-top/)里刮下来的，精简了一下，无论是新闻主页、新闻详细内容页面、发帖页面以及在线聊天页面都需要继承自该模板，这样有助于减少代码冗余，方便维护。<br>
 (2) 网站主页因为是继承自模板，所以所以实现的代码量不多，只需把新闻列表项设计好就行。<br>
 (3) 新闻内容详细信息页也是通过BootStrap中的Example改造而成。<br>
 (4) 发帖页面的实现也不难，因为Django中的ModelForm可以自动实现页面的布局，至于内容输入框，可以调用ckeditor的模板实现。<br>
 (5) 在线聊天页面的实现比较粗糙，主要是那时快要考试，所以只实现了功能，没有对界面做进一步的优化。<br>
 (6) 填充静态数据测试是否与预期效果一致。<br>
 
->>3. urls.py和settings.py的设置
+3. urls.py和settings.py的设置
 
->>4. ModelForm的实现
->>>ModelForm中要显示的字段为发帖时所要填写的字段，所以要隐藏掉"author"（该属性可以在view中通过request.user.userprofile.id获取）,"priority"（其实这字段有点多余）
+4. ModelForm的实现
+>>ModelForm中要显示的字段为发帖时所要填写的字段，所以要隐藏掉"author"（该属性可以在view中通过request.user.userprofile.id获取）,"priority"（其实这字段有点多余）
 
->>5. 业务逻辑层的实现(views)
+5. 业务逻辑层的实现(views)
 
->>6. 前端页面功能的完善
->>>(1) 主要把前端写死的测试数据改为模板标签<br>
+6. 前端页面功能的完善
+>>(1) 主要把前端写死的测试数据改为模板标签<br>
 (2) 补全和完善页面中的js以及JQuery
 
->>7. 测试个页面的功能是否正常
+7. 测试个页面的功能是否正常

@@ -5,9 +5,9 @@ BBS_Demo
 
 #### 知识要点：
 >>Django<br>
->>HTML/CSS/JS<br>
->>BootStrap<br>
->>JQuery<br>
+HTML/CSS/JS<br>
+BootStrap<br>
+JQuery<br>
 
 * Author： 李梓铭<br>
 * E-mail：1564603397@qq.com
@@ -122,7 +122,7 @@ class WebGroup(models.Model):
 ```
 
 #### 四. 前端布局实现(templates)
->1. 创建一个模板Base.html，该模板是从[BootStrap](http://v3.bootcss.com/examples/navbar-fixed-top/)里刮下来的，精简了一下，无论是新闻主页、新闻详细内容页面、发帖页面以及在线聊天页面都需要继承自该模板，这样有助于减少代码冗余，方便维护。<br>
+1. 创建一个模板Base.html，该模板是从[BootStrap](http://v3.bootcss.com/examples/navbar-fixed-top/)里刮下来的，精简了一下，无论是新闻主页、新闻详细内容页面、发帖页面以及在线聊天页面都需要继承自该模板，这样有助于减少代码冗余，方便维护。<br>
 2. 网站主页因为是继承自模板，所以所以实现的代码量不多，只需把新闻列表项设计好就行。<br>
 3. 新闻内容详细信息页也是通过BootStrap中的Example改造而成。<br>
 4. 发帖页面的实现也不难，因为Django中的ModelForm可以自动实现页面的布局，至于内容输入框，可以调用ckeditor的模板实现。<br>
@@ -132,12 +132,12 @@ class WebGroup(models.Model):
 #### 五. urls.py和settings.py的设置
 
 #### 六. ModelForm的实现
->ModelForm中要显示的字段为发帖时所要填写的字段，所以要隐藏掉"author"（该属性可以在view中通过request.user.userprofile.id获取）,"priority"（其实这字段有点多余）
+ModelForm中要显示的字段为发帖时所要填写的字段，所以要隐藏掉"author"（该属性可以在view中通过request.user.userprofile.id获取）,"priority"（其实这字段有点多余）
 
 #### 七. 业务逻辑层的实现(views)
 
 #### 八. 前端页面功能的完善
->1. 主要把前端写死的测试数据改为模板标签<br>
->2. 补全和完善页面中的js以及JQuery<br>
+1. 主要把前端写死的测试数据改为模板标签<br>
+2. 补全和完善页面中的js以及JQuery<br>
 
 #### 九. 测试个页面的功能是否正常

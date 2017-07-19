@@ -132,12 +132,12 @@ class WebGroup(models.Model):
 #### 五. urls.py和settings.py的设置
 
 #### 六. ModelForm的实现
->>ModelForm中要显示的字段为发帖时所要填写的字段，所以要隐藏掉"author"（该属性可以在view中通过request.user.userprofile.id获取）,"priority"（其实这字段有点多余）
+>ModelForm中要显示的字段为发帖时所要填写的字段，所以要隐藏掉"author"（该属性可以在view中通过request.user.userprofile.id获取）,"priority"（其实这字段有点多余）
 
 #### 七. 业务逻辑层的实现(views)
 
 #### 八. 前端页面功能的完善
 >1. 主要把前端写死的测试数据改为模板标签<br>
-2. 补全和完善页面中的js以及JQuery
+>2. 补全和完善页面中的js以及JQuery<br>
 
 #### 九. 测试个页面的功能是否正常

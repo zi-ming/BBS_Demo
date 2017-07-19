@@ -3,14 +3,14 @@ BBS_Demo
 
  该项目模仿了“虎嗅”的网页效果，实现了新闻资讯的分类、浏览、对新闻详细内容的查看，评论；借助Django自带的后台实现对新闻和评论以及用户的管理；除此之外，还实现了用户在线聊天的功能。
 
+* Author： 李梓铭<br>
+* E-mail：1564603397@qq.com
+
 #### 知识要点：
 >>Django<br>
 HTML/CSS/JS<br>
 BootStrap<br>
 JQuery<br>
-
-* Author： 李梓铭<br>
-* E-mail：1564603397@qq.com
 
 Python版本：3.6<br>
 Django版本：1.11.2

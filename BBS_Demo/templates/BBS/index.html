@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load tools %}
+
+{% block style-container %}
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/build.css">
+    <style>
+        .notify-style {
+            text-align: center;
+            background-color: #77B0F6;
+            color: white;
+            display: none;
+        }
+    </style>
+
+{% endblock %}
+
+{% block notify-container %}
+    <div class="notify-style">您有未读新闻，点击查看</div>
+{% endblock %}
+
+{% block page-container %}
+    {% for article in articles reversed %}
+<div class="mod-info-flow" article_id = {{ article.id }}>
+            <div class="mod-b" data-aid="193842">
+                <!--栏目链接-->
+                <div class="mod-thumb">
+                    <a class="transition" title="{{ article.title }}" href="#" target="_blank">
+                        <!--文章图片-->
+                        <img alt="{{ article.title }}" src="/static/{{ article.head_img|truncate_imgUrl }}" style="display: inline;max-width: 100%;">
+                    </a>
+                </div>
+                <div class="mob-ctt">
+                    <h2><a href="{% url 'article_detail' article.id %}" class="transition msubstr-row2"
+                           target="_blank">{{ article.title }}</a></h2>
+
+                    <div class="mob-author">
+                        <img src="/static/{{ article.author.head_img|truncate_imgUrl }}" class="author-head-img">
+                        <a href="#">
+                            <span class="author-name ">{{ article.author }}</span>
+                        </a>
+                        {% cal_cmt_fvr article as cmt_info %}
+                        <span class="glyphicon glyphicon-comment cmt-margin" aria-hidden="true"></span>
+                        <em>{{ cmt_info.sum_cmt }}</em>
+                        <span class="glyphicon glyphicon-thumbs-up cmt-margin" aria-hidden="true"></span>
+                        <em>{{ cmt_info.sum_fvr }}</em>
+                        <span class="pub-date">{{ article.pub_date }}</span>
+                    </div>
+
+                    <!--外部文章/内部文章两者取其一-->
+                    <div class="mob-sub">{{ article.brief }}</div>
+                </div>
+            </div>
+    </div>
+    {% endfor %}
+{% endblock %}
+
+{% block script-container %}
+    <script>
+    $(document).ready(function () {
+        setInterval(function () {
+            var latest_article_id = $(".mod-info-flow").first().attr("article_id");
+            $.getJSON(
+                "{% url 'get_latest_article_count' %}",
+                {"latest_article_id":latest_article_id},
+                function (callback) {
+                    var res = callback["latest_article_count"];
+                    if (res==0){
+                        $(".notify-style").css("display","none");
+                    }
+                    else{
+                        $(".notify-style").text("您有"+res+"条未读新闻，点击查看");
+                        $(".notify-style").css("display","block");
+                    }
+
+                }
+            ); // end getJson
+        }, 3000); // end setInterval
+        
+        $(".notify-style").click(function () {
+            window.location.reload();
+        });
+    }); // end document
+    </script>
+{% endblock %}
